@@ -14,44 +14,43 @@ this file and include it in basic-server.js so that it actually works.
 // Message storage
 var pastMessages = {results: []};
 
+// Default headers
+var defaultCorsHeaders = {
+  'access-control-allow-origin': '*',
+  'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'access-control-allow-headers': 'content-type, accept',
+  'access-control-max-age': 10 // Seconds.
+};
+
 // Request handler
 var requestHandler = function(request, response) {
-  var statusCode;  
+
   var headers = defaultCorsHeaders;
   headers['Content-Type'] = 'application/json';
   console.log('Serving request type ' + request.method + ' for url ' + request.url);
 
+  // Addressing the 404 test
   if (request.url !== '/classes/messages') {
-    statusCode = 404;
-    response.writeHead(statusCode, JSON.stringify(headers));
+    response.writeHead(404, JSON.stringify(headers));
     response.end();
-    // return;
   }
+
   // POST request
   if (request.method === 'POST') {
-    statusCode = 201;
     request.on('data', function(data) {
       var requestBody = '';
       requestBody += data;
       pastMessages.results.push(JSON.parse(requestBody));
     });
     request.on('end', function() {
-      response.writeHead(statusCode, JSON.stringify(headers));
+      response.writeHead(201, JSON.stringify(headers));
       response.end(JSON.stringify(pastMessages));
     });
   // GET REQUEST
   } else if (request.method === 'GET') {
-    statusCode = 200;
-    response.writeHead(statusCode, JSON.stringify(headers));  
+    response.writeHead(200, JSON.stringify(headers));  
     response.end(JSON.stringify(pastMessages));
   }
-};
-
-var defaultCorsHeaders = {
-  'access-control-allow-origin': '*',
-  'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'access-control-allow-headers': 'content-type, accept',
-  'access-control-max-age': 10 // Seconds.
 };
 
 module.exports.requestHandler = requestHandler;

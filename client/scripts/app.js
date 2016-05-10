@@ -60,7 +60,7 @@ var app = {
       contentType: 'application/json',
       data: { order: '-createdAt'},
       success: function(data) {
-        
+
         // Don't bother if we have nothing to work with
         if (!data.results || !data.results.length) { return; }
 
@@ -196,7 +196,7 @@ var app = {
         app.addRoom(roomname);
 
         // Select the menu option
-        app.$roomSelect.val(roomname);
+        app.$roomSelect.val(roomname); 
 
         // Fetch messages again
         app.fetch();
