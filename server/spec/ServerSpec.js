@@ -62,7 +62,18 @@ describe('Node Server Request Listener Function', function() {
       message: 'Do my bidding!'
     };
     var req = new stubs.request('/classes/messages', 'POST', stubMsg);
+    // console.log('req =================== ', req);
+    // req = { 
+    //   url: '/classes/messages', 
+    //   method: 'POST',
+    //   _postData: { username: 'Jono', message: 'Do my bidding!' },
+    //   setEncoding: [Function],
+    //   on: [Function: bound ],
+    //   addListener: [Function: bound ] 
+    // }
+
     var res = new stubs.response();
+    // res = undefined;
 
     handler.requestHandler(req, res);
 
@@ -95,6 +106,7 @@ describe('Node Server Request Listener Function', function() {
 
     expect(res._responseCode).to.equal(200);
     var messages = JSON.parse(res._data).results;
+    console.log('messages ======================= ', messages);
     expect(messages.length).to.be.above(0);
     expect(messages[0].username).to.equal('Jono');
     expect(messages[0].message).to.equal('Do my bidding!');
